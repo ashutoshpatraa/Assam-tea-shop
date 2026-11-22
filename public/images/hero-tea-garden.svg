@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" role="img" aria-labelledby="title desc">
+  <title id="title">Assam tea garden and chai</title>
+  <desc id="desc">Warm editorial illustration of layered tea bushes and a steaming cup.</desc>
+  <rect width="1200" height="800" fill="#d8c4a1"/>
+  <circle cx="930" cy="155" r="92" fill="#f7f1e5"/>
+  <path d="M0 470 C180 390 330 430 500 350 C720 250 900 330 1200 220 L1200 800 L0 800Z" fill="#6e8062"/>
+  <path d="M0 555 C230 470 430 520 610 430 C820 330 980 430 1200 330 L1200 800 L0 800Z" fill="#315640"/>
+  <path d="M0 650 C260 560 470 630 700 520 C890 430 1040 520 1200 470 L1200 800 L0 800Z" fill="#214b3a"/>
+  <g opacity=".25" fill="#f7f1e5">
+    <circle cx="180" cy="520" r="8"/><circle cx="220" cy="500" r="8"/><circle cx="260" cy="530" r="8"/>
+    <circle cx="760" cy="470" r="8"/><circle cx="810" cy="450" r="8"/><circle cx="860" cy="480" r="8"/>
+  </g>
+  <g transform="translate(150 330)">
+    <ellipse cx="230" cy="370" rx="210" ry="32" fill="#173729" opacity=".35"/>
+    <path d="M70 130h320l-38 210H108Z" fill="#fffdf7"/>
+    <path d="M390 170c95 0 95 145 0 145h-30v-50h28c34 0 34-45 0-45h-28Z" fill="#fffdf7"/>
+    <ellipse cx="230" cy="132" rx="160" ry="35" fill="#d9cebd"/>
+    <ellipse cx="230" cy="128" rx="145" ry="24" fill="#8a571c"/>
+    <path d="M180 30c-30-48 38-70 5-118M245 30c-30-48 38-70 5-118M310 30c-30-48 38-70 5-118" fill="none" stroke="#fffdf7" stroke-width="14" stroke-linecap="round" opacity=".85"/>
+  </g>
+  <path d="M0 0h1200v16H0zM0 784h1200v16H0z" fill="#a64032"/>
+</svg>

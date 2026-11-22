@@ -1,0 +1,159 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model BusinessSettings {
+  id                    String        @id @default("default")
+  shopOpen              Boolean       @default(false)
+  businessConfigured    Boolean       @default(false)
+  address               String        @default("")
+  mapUrl                String?
+  payeeName             String        @default("Assam Tea Shop")
+  upiId                 String        @default("")
+  staticQrUrl           String?
+  deliveryEnabled       Boolean       @default(false)
+  deliveryFeePaise      Int           @default(0)
+  orderExpiryMinutes    Int           @default(15)
+  pickupIntervalMinutes Int           @default(15)
+  starterDataMode       Boolean       @default(false)
+  openingHours          OpeningHour[]
+  createdAt             DateTime      @default(now())
+  updatedAt             DateTime      @updatedAt
+}
+
+model OpeningHour {
+  id          String           @id @default(cuid())
+  settingsId  String           @default("default")
+  weekday     Int
+  isClosed    Boolean          @default(true)
+  openMinute  Int?
+  closeMinute Int?
+  settings    BusinessSettings @relation(fields: [settingsId], references: [id], onDelete: Cascade)
+
+  @@unique([settingsId, weekday])
+}
+
+model MenuItem {
+  id              String             @id @default(cuid())
+  slug            String             @unique
+  name            String
+  description     String
+  category        String
+  pricePaise      Int
+  dietary         String
+  active          Boolean            @default(true)
+  soldOutToday    Boolean            @default(false)
+  stockOnHand     Int?
+  imageUrl        String?
+  isStarterData   Boolean            @default(false)
+  optionGroups    MenuOptionGroup[]
+  orderItems      OrderItem[]
+  createdAt       DateTime           @default(now())
+  updatedAt       DateTime           @updatedAt
+
+  @@index([category, active])
+}
+
+model MenuOptionGroup {
+  id         String       @id @default(cuid())
+  itemId     String
+  name       String
+  selection  String       @default("SINGLE")
+  required   Boolean      @default(false)
+  minSelect  Int          @default(0)
+  maxSelect  Int          @default(1)
+  sortOrder  Int          @default(0)
+  item       MenuItem     @relation(fields: [itemId], references: [id], onDelete: Cascade)
+  options    MenuOption[]
+}
+
+model MenuOption {
+  id            String          @id @default(cuid())
+  groupId       String
+  name          String
+  priceDeltaPaise Int           @default(0)
+  active        Boolean         @default(true)
+  sortOrder     Int             @default(0)
+  group         MenuOptionGroup @relation(fields: [groupId], references: [id], onDelete: Cascade)
+}
+
+model Customer {
+  id        String   @id @default(cuid())
+  name      String
+  phone     String   @unique
+  email     String?
+  orders    Order[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model OrderCounter {
+  id        String @id @default("orders")
+  nextValue Int    @default(1)
+}
+
+model Order {
+  id               String             @id @default(cuid())
+  publicId         String             @unique
+  customerId       String
+  status           String             @default("PENDING_PAYMENT")
+  orderType        String
+  tableNumber      String?
+  pickupAt         DateTime?
+  deliveryAddress  String?
+  notes            String?
+  subtotalPaise    Int
+  deliveryFeePaise Int                @default(0)
+  totalPaise       Int
+  currency         String             @default("INR")
+  isSample         Boolean            @default(false)
+  customer         Customer           @relation(fields: [customerId], references: [id], onDelete: Restrict)
+  items            OrderItem[]
+  paymentSubmissions PaymentSubmission[]
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @updatedAt
+
+  @@index([status, createdAt])
+  @@index([orderType, createdAt])
+}
+
+model OrderItem {
+  id                   String   @id @default(cuid())
+  orderId              String
+  menuItemId           String?
+  nameSnapshot         String
+  unitPricePaise       Int
+  quantity             Int
+  dietarySnapshot      String
+  customizationsJson   String   @default("[]")
+  stockReservedQuantity Int     @default(0)
+  stockReleasedAt      DateTime?
+  order                Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  menuItem             MenuItem? @relation(fields: [menuItemId], references: [id], onDelete: SetNull)
+}
+
+model PaymentSubmission {
+  id               String   @id @default(cuid())
+  orderId          String
+  utr              String   @unique
+  screenshotUrl    String?
+  status           String   @default("SUBMITTED")
+  verificationNote String?
+  reviewedBy       String?
+  submittedAt      DateTime @default(now())
+  reviewedAt       DateTime?
+  order            Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  @@index([status, submittedAt])
+}
+
+model RateLimitBucket {
+  id                 String @id
+  count              Int
+  windowStartedAtMs  BigInt
+}
