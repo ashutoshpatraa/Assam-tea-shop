@@ -98,22 +98,24 @@ See [context.md](./context.md), [plan.md](./plan.md), [design.md](./design.md), 
 
 ## Screenshots
 
-The screenshots use the default development environment, where the shop is intentionally closed and starter data is visible.
+The screenshots showcase the redesigned Neo-Brutalist storefront, 3D product showcase, interactive menu, streamlined checkout, and admin dashboard.
 
 ### Home
-
 ![Assam Tea Shop home page](./docs/screenshots/home.png)
 
 ### Menu
-
 ![Assam Tea Shop menu](./docs/screenshots/menu.png)
 
-### Mobile menu
+### 3D Product Detail (Assam Milk Chai)
+![Assam Milk Chai 3D Product Showcase](./docs/screenshots/assam-milk-chai.png)
 
+### Cart & Checkout
+![Assam Tea Shop checkout page](./docs/screenshots/checkout.png)
+
+### Mobile Views
 ![Assam Tea Shop mobile menu](./docs/screenshots/menu-mobile.png)
 
-### Admin login
-
+### Admin Login
 ![Assam Tea Shop admin login](./docs/screenshots/admin-login.png)
 
 ## Refresh screenshots
