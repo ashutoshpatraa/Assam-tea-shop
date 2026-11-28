@@ -71,11 +71,28 @@ const MARQUEE = [
 function useReveal() {
   useEffect(() => {
     const els = document.querySelectorAll(".reveal, .reveal-left, .reveal-right");
+    if (!els.length) return;
+
     const obs = new IntersectionObserver(
-      (entries) => entries.forEach((e) => { if (e.isIntersecting) e.target.classList.add("is-visible"); }),
-      { threshold: 0.12, rootMargin: "0px 0px -50px 0px" }
+      (entries) =>
+        entries.forEach((e) => {
+          if (e.isIntersecting) {
+            e.target.classList.add("is-visible");
+            obs.unobserve(e.target);
+          }
+        }),
+      { threshold: 0.05, rootMargin: "60px 0px 60px 0px" }
     );
-    els.forEach((el) => obs.observe(el));
+
+    els.forEach((el) => {
+      const rect = el.getBoundingClientRect();
+      if (rect.top < window.innerHeight + 60 && rect.bottom > 0) {
+        el.classList.add("is-visible");
+      } else {
+        obs.observe(el);
+      }
+    });
+
     return () => obs.disconnect();
   }, []);
 }
