@@ -13,6 +13,9 @@ if not exist ".env" (
   echo Keeping the existing .env file.
 )
 
+:: Ensure SEED_STARTER_DATA is enabled for local menu visibility
+powershell -NoProfile -Command "if (Test-Path .env) { (Get-Content .env) -replace 'SEED_STARTER_DATA=\"false\"', 'SEED_STARTER_DATA=\"true\"' | Set-Content .env }" 2>nul
+
 echo Installing npm dependencies...
 call npm install
 if errorlevel 1 goto fail
@@ -22,14 +25,21 @@ call npm run db:generate
 if errorlevel 1 goto fail
 
 echo Applying database migrations...
+set SEED_STARTER_DATA=true
 call npm run db:migrate -- --name setup
 if errorlevel 1 goto fail
 
+echo Seeding starter menu items and categories...
+set SEED_STARTER_DATA=true
+call npm run db:seed
+if errorlevel 1 goto fail
+
 echo.
-echo Setup complete.
-echo 1. Edit .env and set the real admin credentials and UPI details.
-echo 2. Run run.bat to start the website.
-echo 3. Keep SEED_STARTER_DATA=false unless you intentionally need starter data.
+echo ===================================================
+echo Setup complete! Starter menu items are ready.
+echo 1. Run run.bat to start the website.
+echo 2. Open http://localhost:3000 in your browser.
+echo ===================================================
 echo.
 pause
 exit /b 0
